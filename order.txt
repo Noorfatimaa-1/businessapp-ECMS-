@@ -1,0 +1,6 @@
+joysticks 3000 2
+joysticks 3000 1
+headphone 4000 1
+laptop 20000 1
+speakers 25000 1
+headphone 4000 1
