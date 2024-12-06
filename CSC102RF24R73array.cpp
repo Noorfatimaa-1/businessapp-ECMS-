@@ -37,9 +37,9 @@ bool loadproducts(string pdtnames[],float pdtprices[],int pdtquantity[],int &num
 
     }
     number_of_pdts=0;
-    while(fin)
+    while( fin>>pdtnames[number_of_pdts]>>pdtprices[number_of_pdts]>>pdtquantity[number_of_pdts] )
     {   
-       fin>>pdtnames[number_of_pdts]>>pdtprices[number_of_pdts]>>pdtquantity[number_of_pdts];          
+               
        number_of_pdts++;
     }
     fin.close();
@@ -51,9 +51,9 @@ bool loadproducts(string pdtnames[],float pdtprices[],int pdtquantity[],int &num
         return false;
     }
     no_of_orders=0;
-    while(fin)
+    while( fin>>order_names[no_of_orders]>>order_prices[no_of_orders]>>order_quantities[no_of_orders])
     {
-        fin>>order_names[no_of_orders]>>order_prices[no_of_orders]>>order_quantities[no_of_orders];
+       
         no_of_orders++;
     }         
     fin.close();
@@ -88,7 +88,7 @@ bool savepdts(string pdtnames[],float pdtprices[],int pdtquantities[],int &numbe
          return false;
       }
       cout<<endl;
-    for(int i=0;i<number_of_pdts;i++)
+    for(int i=0;i<no_of_orders;i++)
     {
       fout<<order_names[i]<<" "<<order_prices[i]<<" "<<order_quantities[i]<<endl;
     }
@@ -101,7 +101,7 @@ bool savepdts(string pdtnames[],float pdtprices[],int pdtquantities[],int &numbe
 
 
 //validation functions
-bool checkname(string &name)
+bool checkname(string name)
 {
     if(name.length()<=15)
     {
@@ -245,10 +245,10 @@ void adminmenu()                    //admin menu printing function
 
 
 //validation function for using in the functions
-int intvalid1(int input)
+void intvalid1(int input)
 {
 
-    if(cin.fail())
+    if(cin.fail()) 
     {
         cin.clear();
         cin.ignore(300,'\n');
@@ -598,7 +598,7 @@ void vieworders(string order_names[],float order_prices[],int order_quantities[]
         }
         cout<<endl;
         cout<<endl;
-        cout<<setw(15)<<left<<"Sr. no."<<setw(18)<<left<<"Names"<<setw(16)<<left<<"Prices"<<setw(13)<<right<<"Quantity";
+        cout<<setw(15)<<left<<"Sr. no."<<setw(18)<<left<<"Names"<<setw(16)<<left<<"Prices"<<setw(10)<<right<<"Quantity";
         cout<<endl;
         for(int i=0;i<65;i++)
                 {
