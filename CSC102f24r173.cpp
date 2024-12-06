@@ -69,9 +69,9 @@ bool loadproducts(products arr[],int &number_of_pdts,int &no_of_orders,orders ar
 
     }
     number_of_pdts=0;
-    while(!fin.eof())
+    while(fin>>arr[number_of_pdts].pdtnames>>arr[number_of_pdts].pdtprices>>arr[number_of_pdts].pdtquantity )
     {   
-       fin>>arr[number_of_pdts].pdtnames>>arr[number_of_pdts].pdtprices>>arr[number_of_pdts].pdtquantity;          
+                
        number_of_pdts++;
     }
     fin.close();
@@ -84,9 +84,9 @@ bool loadproducts(products arr[],int &number_of_pdts,int &no_of_orders,orders ar
         return false;
     }
     no_of_orders=0;
-    while(!fin.eof())
+    while( fin>>arr2[no_of_orders].order_names>>arr2[no_of_orders].order_prices>>arr2[no_of_orders].order_quantities)
     {
-        fin>>arr2[no_of_orders].order_names>>arr2[no_of_orders].order_prices>>arr2[no_of_orders].order_quantities;
+       
         no_of_orders++;
     }          
     fin.close();
@@ -125,7 +125,7 @@ bool savepdts(products arr[],int &number_of_pdts,int &no_of_orders,orders arr2[]
          return false;
       }
       cout<<endl;
-    for(int i=0;i<number_of_pdts;i++)
+    for(int i=0;i<no_of_orders;i++)
     {
       fout<<arr2[i].order_names<<" "<<arr2[i].order_prices<<" "<<arr2[i].order_quantities<<endl;
     }
@@ -198,7 +198,7 @@ bool validquantity(int quantity)
 
 void header()                    //function for printing the header             
 {
-    cout <<setw(70)<<left<< "============================================================" << endl;
+    cout <<setw(70)<<left<< "=============================================================" << endl;
     cout <<setw(70)<<left<< " ^^^^^^^^      ^^^^^^^        ^^^^^^     ^^^^^^        ^^^^^" << endl;
     cout <<setw(70)<<left<< " *******     *)       (*      **   *    *   ***      *)      (*"<<endl;
     cout <<setw(70)<<left<< " ^)         ^)         (^     ^)    ^^ ^^    (^     ^)        (^" << endl;
@@ -209,7 +209,7 @@ void header()                    //function for printing the header
     cout <<setw(70)<<left<< " ^)         ^)         (*     ^)             (^      ^)      (^" << endl;
     cout <<setw(70)<<left<< " *******     *)       (^      *)             (*      *)      (*" <<endl;
     cout <<setw(70)<<left<< " ^^^^^^^^      ^^^^^^         ^)             (^        ^^^^^" << endl;
-    cout <<setw(70)<<left<< "============================================================" << endl;
+    cout <<setw(70)<<left<< "=============================================================" << endl;
 
     cout << endl;
     cout << endl;
@@ -781,8 +781,9 @@ void buyermenu()                //printing buyer menu on console
     cout << "2. View cart" << endl;
     cout << "3. Place Order" << endl;
     cout << "4. Checkout"<<endl;
-    cout << "5. Help section" << endl;
-    cout << "6. Exit" <<endl;
+    cout << "5. Remove order"<<endl;
+    cout << "6. Help section" << endl;
+    cout << "7. Exit" <<endl;
 }
 //end of buyer menu function
 
@@ -1176,7 +1177,80 @@ bool correctpwd(string username,string pwd)
 }
 
 
-//main function starts here
+
+//delete orders
+void deleteorders(products arr[],int &number_of_pdts,orders arr2[],const int max,int &no_of_orders)
+{
+    if(no_of_orders==0)
+    {
+        cout<<"NO ORDERS PLACED .";
+        cout<< endl;
+    }
+    else
+    {
+        for(int i=0;i<60;i++)
+            {
+                cout<<"*";               
+            }
+        cout<<endl; 
+        cout << setw(40) << right <<" ORDER ARE LISTED BELOW ";
+        cout<<endl;
+        for(int i=0;i<60;i++)
+            {
+                cout<<"*";               
+            }
+        cout<<endl; 
+        cout<<endl;
+        cout<<setw(15)<<left<<"Sr. no."<<setw(18)<<left<<"Names"<<setw(15)<<left<<"Prices"<<setw(10)<<right<<"Quantity";
+        cout<<endl;
+        for(int i=0;i<60;i++)
+            {
+                cout<<"-";               
+            }
+        cout<<endl; 
+        for(int i=0;i<no_of_orders;i++)
+        {
+            cout<<setw(15)<<left<< i+1 <<setw(18)<<left<<arr2[i].order_names<<arr2[i].order_prices<<"PKR"<<setw(16)<<right<<arr2[i].order_quantities;
+            cout<<endl;
+            for(int i=0;i<60;i++)
+            {
+                cout<<"-";               
+            }
+            cout<<endl;
+        }
+    
+    int orderdel;
+    cout<<"Enter id : ";
+    do
+    {
+        cin>>orderdel; 
+        intvalid1(orderdel);                                //function for checking wether the enetredid is integer 
+    }while (!validprice(orderdel));                         //entered id is positive
+
+     while(!(orderdel>=1&&orderdel<=no_of_orders))          //while loop for checking wether the entered id exists
+        {
+           cout<<"Invalid product id ";
+           cout<< " Re-enter : ";
+           cin>>orderdel;
+           intvalid(orderdel);
+           cout<<endl;
+        }
+    orderdel--;                                             //decrementing as index start from 0
+    for(int i=orderdel;i<no_of_orders;i++)
+    {
+       arr2[i].order_names=arr2[i+1].order_names;
+       arr2[i].order_quantities=arr2[i+1].order_quantities;
+       arr2[i].order_prices=arr2[i+1].order_prices;
+    }
+    no_of_orders--;
+    cout<<"Order deleted successfully.";
+    cout<< endl;
+    }
+
+}
+
+
+//main function 
 int main()                        
 {
     
@@ -1322,13 +1396,13 @@ int main()
                     
                     cout<<endl;
 
-                    if(buyerrequest==6)
+                    if(buyerrequest==7)
                     {
                         buyerexit();
                         cout<<endl;
                         break;
                     }
-                    if(buyerrequest==1||buyerrequest==2||buyerrequest==3||buyerrequest==4||buyerrequest==5)   //validation
+                    if(buyerrequest==1||buyerrequest==2||buyerrequest==3||buyerrequest==4||buyerrequest==5||buyerrequest==6)   //validation
                     {
                         switch(buyerrequest)         //for selecting one from multiple options
                         {
@@ -1355,6 +1429,11 @@ int main()
                             } 
                             case 5:
                             {
+                                deleteorders(arr,number_of_pdts,arr2,max,no_of_orders);
+                                break;
+                            }
+                            case 6:
+                            {
                                 helpsection();
                                 break;
                             }
@@ -1367,7 +1446,7 @@ int main()
                             //validation if end          
                     else
                     {
-                        cout<<"you can enter (1,2,3,4,5) ";
+                        cout<<"you can enter (1,2,3,4,5,6) ";
                         cout<<endl;
                     }
                 }
